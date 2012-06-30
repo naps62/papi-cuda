@@ -1,0 +1,104 @@
+\documentclass[abstract=on,10pt,twocolumn]{scrartcl}
+
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{datetime}
+
+\usepackage[paper=a4paper,top=2cm,left=1.5cm,right=1.5cm,bottom=2cm,foot=1cm]{geometry}
+
+\usepackage{relsize}%	relative font sizes
+
+\usepackage[retainorgcmds]{IEEEtrantools}%	IEEEeqnarray
+\setlength{\IEEEnormaljot}{4\IEEEnormaljot}
+
+\usepackage{indentfirst}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{listings}
+\usepackage{color}
+
+\usepackage{todonotes}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage[cmex10]{amsmath}
+\usepackage{algpseudocode}
+\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{epstopdf}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+
+
+%%%%%%%%%%%%%%%%
+%  title page  %
+%%%%%%%%%%%%%%%%
+\titlehead{University of Minho \hfill Master's Degree in Informatics Engineering\\Department of Informatics \hfill Computer Graphics - Integrated Project}
+
+\title{Performance API for CUDA}
+\subtitle{A critical analysis}
+
+\author{
+	\\Ana Catarina Macedo\\
+		\texttt{\smaller a54XXX@alunos.uminho.pt}
+	\and
+    \\Miguel Palhas\\
+     	\texttt{\smaller pg19808@alunos.uminho.pt}
+	\and
+	\\Pedro Costa\\
+		\texttt{\smaller pg19830@alunos.uminho.pt}
+}
+
+\date{Braga, \docdate}
+
+%\subject{PAPI CUDA}
+
+%%%%%%%%%%%
+%  Hacks  %
+%%%%%%%%%%%
+
+%	Paragraph (title) with linebreak
+\newcommand{\paragraphh}[1]{\paragraph{#1\hfill}\hfill
+
+}
+
+%	Add "Appendix" to the appendices titles, but not to the references
+\usepackage{ifthen}
+\newcommand*{\appendixmore}{%
+  \renewcommand*{\othersectionlevelsformat}[1]{%
+    \ifthenelse{\equal{##1}{section}}{\appendixname~}{}%
+    \csname the##1\endcsname\autodot\enskip}
+  \renewcommand*{\sectionmarkformat}{%
+    \appendixname~\thesection\autodot\enskip}
+}
+
+\newdateformat{mmmyyyydate}{\monthname[\THEMONTH] \THEYEAR}
+\newcommand{\docdate}{\mmmyyyydate\today}
+
+\newcommand{\tm}{\textsuperscript{\texttrademark}}
+\newcommand{\tr}{\textsuperscript{\textregistered}}
+
+
+
+\begin{document}
+	\maketitle
+
+	\todo[inline]{corrigir o num de aluno da guitar}
+	\input{report/000-abstract}
+	\input{report/100-intro}
+	\input{report/200-papi}
+	\input{report/300-cuda}
+	\input{report/400-papi-cuda}
+	\input{report/500-test-case}
+	\input{report/600-results}
+	\input{report/700-analysis}
+
+
+	\nocite*
+	\bibliographystyle{cell}
+	\bibliography{references}
+	\todo[inline]{Corrigir o aspecto das referencias}
+
+\end{document}
