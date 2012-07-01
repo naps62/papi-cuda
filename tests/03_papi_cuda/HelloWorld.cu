@@ -38,6 +38,17 @@ __global__ void helloWorld(char*);
 int main(int argc, char** argv)
 {
 #ifdef PAPI
+	if (argc != 4) {
+		printf("Usage: ./a.out <threads> <blocks> <counter_name>")
+		return -2;
+	}
+
+	int threads = atoi(argv[1]);
+	int blocks = atoi(argv[2]);
+	char *event_name[];
+	event_name[0] = argv[3];
+
+
 	int retval, i;
 	int EventSet = PAPI_NULL;
 	long long values[NUM_EVENTS];
@@ -45,7 +56,7 @@ int main(int argc, char** argv)
 	   FOR THE CUDA DEVICE YOU ARE RUNNING ON.
 	   RUN papi_native_avail to get a list of CUDA events that are 
 	   supported on your machine */
-    char *EventName[] = { "PAPI_FP_OPS" };
+    //char *EventName[] = { "PAPI_FP_OPS" };
 	int events[NUM_EVENTS];
 	
 	/* PAPI Initialization */
@@ -60,11 +71,11 @@ int main(int argc, char** argv)
 	
 	/* convert PAPI native events to PAPI code */
 	for( i = 0; i < NUM_EVENTS; i++ ){
-		retval = PAPI_event_name_to_code( EventName[i], &events[i] );
+		retval = PAPI_event_name_to_code( event_name[i], &events[i] );
 		if( retval != PAPI_OK )
 			fprintf( stderr, "PAPI_event_name_to_code failed\n" );
 		else
-			printf( "Name %s --- Code: %x\n", EventName[i], events[i] );
+			printf( "Name %s --- Code: %x\n", event_name[i], events[i] );
 	}
 
 	retval = PAPI_create_eventset( &EventSet );
@@ -94,14 +105,6 @@ int main(int argc, char** argv)
 		str[j] -= j;
 		//printf("str=%s\n", str);
 	}
-
-	if (argc != 4) {
-		printf("Usage: ./a.out <threads> <blocks> <counter_name>")
-		return -2;
-	}
-
-	int threads = atoi(argv[1]);
-	int blocks = atoi(argv[2]);
 	
 	// allocate memory on the device
 	char *d_str;
