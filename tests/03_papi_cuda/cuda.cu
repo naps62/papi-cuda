@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 {
 #ifdef PAPI
 	if (argc != 4) {
-		printf("Usage: ./a.out <threads> <blocks> <counter_name>");
+		printf("Usage: ./a.out <threads> <blocks> <counter_name>\n");
 		return -2;
 	}
 
