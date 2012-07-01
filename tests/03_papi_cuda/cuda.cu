@@ -97,34 +97,34 @@ int main(int argc, char** argv)
 	int j;
 	
 	// desired output
-	int str[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	int arr[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
 	// mangle contents of output
 	// the null character is left intact for simplicity
 	for(j = 0; j < 12; j++) {
-		str[j] -= j;
+		arr[j] -= j;
 		//printf("str=%s\n", str);
 	}
 	
 	// allocate memory on the device
-	char *d_str;
-
-	cudaMalloc((void**)&d_str, sizeof(int) * N);
+	int *d_arr;
+	size_t size = sizeof(int) * N;
+	cudaMalloc((void**)&d_arr, size);
 	
 	// copy the string to the device
-	cudaMemcpy(d_str, str, size, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_arr, arr, size, cudaMemcpyHostToDevice);
 	
 
 	// invoke the kernel
-	kernel<<< threads, blocks >>>(d_str);
+	kernel<<< threads, blocks >>>(d_arr);
 
 	// retrieve the results from the device
-	cudaMemcpy(str, d_str, size, cudaMemcpyDeviceToHost);
+	cudaMemcpy(arr, d_ar, size, cudaMemcpyDeviceToHost);
 	
 	// free up the allocated memory on the device
-	cudaFree(d_str);
+	cudaFree(d_arr);
 	
-	printf("END: %s\n", str);
+	printf("END: %p\n", arr);
 
 	
 #ifdef PAPI
