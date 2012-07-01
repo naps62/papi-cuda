@@ -2,3 +2,8 @@
 \label{sec:papi-cuda}
 
 \todo[inline]{Talk about PAPI's API for CUDA, via CUPTI}
+\todopfac{Se quiseres fala aqui daquilo que achas que está bem/mal com a forma de utilizar o PAPI}
+
+PAPI CUDA is an attempt to create a CUDA component to integrate with the PAPI API, allowing for the same simple workflow of the library to add and remove counters, retrieve values. This component is implemented based on CUPTI, and works as an abstraction layer to the Driver calls required when using raw CUPTI code.
+
+In order to use this component, PAPI must be compiled with the appropriate options, linking with the CUDA and CUPTI directories
