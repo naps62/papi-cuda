@@ -1,0 +1,27 @@
+\subsubsection{Event API}
+\label{sec:cuda:prof:event}
+
+This API provides accesses to counters on a CUDA-enabled device. Much like PAPI, although with some differences due to architectural aspects, this counters provide access to hardware level counters to measure specific events on the GPU.
+
+The workflow of this API is straighforward, by simply defining a group of events to measured prior to the kernel invocation, and retrieving the results at the end.
+
+Some care needs to be taken with this, as event registration is asynchronous, meaning it is the programmer's responsibility the relevant kernel code only starts to run after the registration, and not thread-safe, meaning that, if other threads in the application are also using the GPU, chances are they are concurrently executing kernels, which will interfere with the measurements.
+
+The set of events that can be measured is dependant on the compute capability of the device used. Prior to compute capability 2.0, the event set was quite limited, allowing only measurements of cache hits, misses, number of instructions (optionally of a given type), divergent branches, and counters related to memory accesses.
+
+There are also 8 generic purpose triggers that can be used by the programmer to measure specific programmer-defined events in the code.
+
+As for Compute Capability 2.0 and greater, most of the events from prior versions are still compatible, but a lot more are added. These events are split over for domains:
+
+\begin{description}
+	\item[\texttt{domain\_a}] For events related with cache misses/hits, conflicts. Also relates to texture cache;
+
+	\item[\texttt{domain\_b}] Various read/write requests for each memory hierarchy level (cache, Texture, DRAM);
+
+	\item[\texttt{domain\_c}] For global load/store operation counters. Multiple counters are provided for the different amount of bytes requested.
+
+	\item[\texttt{domain\_d}] Instruction related counters, like number of branches, divergences, active warps/cycles, number of instructions and memory requests. 8 general purpose counters are also included in this domain
+
+\end{description}
+
+In addition to the event set, other differences distinguish CUDA devices with compute capability below 2.0. Perhaps the most important of them is the fact that on those devises, all events are counted for only one SM. Starting on compute capability 2.0, events from \texttt{domain\_d} are counted for multiple (but no all) SM's. Therefore, to get the most consisted results, it is best to use a grid that has a number of blocks multiple of the total number of SM's in the device used.

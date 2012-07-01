@@ -1,8 +1,14 @@
 \section{CUDA}
 \label{sec:cuda}
 
-\todo[inline]{Explain CUDA}
+%\todo[inline]{Explain CUDA}
 
-Compute Unified Device Architecture, or CUDA\tm is a parallel computing platform developed by NVidia\tr that enabled massive performance increases for highly data-parallel applications, by providing an programming model more suited to graphics processing units.
+Compute Unified Device Architecture, or CUDA\tm is a parallel computing platform developed by NVidia\tr that enabled massive performance increases for highly data-parallel applications, by providing a programming model more suited to graphics processing units.
 
-\input{report/310-cuda-prof}
+Contrary to a CPU, which focus on executing a small amount of threads quickly, by emplying methods like branch-prediction and superscalarity, a GPU follows a different filosophy, executing much more threads slowly. Even though each individual thread runs more slowly, that latency is hidden by the fact that many more threads are executing concurrenlty, and the hardware level scheduler can switch the context with only a few clock cycles.
+
+Of course, since the programming model is completely different, a CPU thread isn't comparable in any way to a CUDA thread. For example, while a simple algorithm might consist in looping through a collection of elements, applying an operation to each one, in CUDA a more suitable model would be to launch one thread for each element, and let the hardware scheduler manage them.
+
+\input{report/310-model}
+
+\input{report/320-prof}

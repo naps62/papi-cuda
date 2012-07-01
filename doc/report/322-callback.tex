@@ -1,0 +1,6 @@
+\subsubsection{Callback API}
+\label{sec:cuda:prof:callback}
+
+The CUPTI Callback API allows the programmer to register callbacks in it's own code, which will be invoked upon calling a CUDA runtime or driver function.
+
+Not only is this useful when profiling, it might also be a good tool to automate a task that the programmer wants to execute each time a speficic event occurs (for example, create a custom log of all memory transactions between the CPU and the GPU).

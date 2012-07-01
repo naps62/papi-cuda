@@ -1,0 +1,22 @@
+\subsection{Programming Model}
+\label{sec:cuda:model}
+
+A CUDA device (GPU) tipically consists on a group of Streaming Multiprocessors (SM's), each one containing up to 64 CUDA Cores \footnote{This refers to the CUDA architecture up until Fermi. The new Kepler architecture features 192 CUDA Cores in each new extended Streaming Multiprocessor (SMX)}
+This Cores are the the elementary processing unit of a GPU. Each one is capable of one simple sequential operation at a time (arithmetic operations for example). More complex operations, like trigonometric functions, and square roots are executed on four Special Function Units, which process them at a rate of one instruction per clock-cycle.
+
+Each SM can only issue one instruction each clock cycle, which means that all CUDA Cores of a given SM must execute the same instruction (altough the indexing of each CUDA Thread allows them to operate on different data). Thus, threads are grouped into warps, 32 Threads each, which are executed at the same time on an SM. Two schedulers per SM allow near peak performance by selecting two instructions from two different warps to be issued every clock cycle, increasing concurrency.
+
+Note that this greatly limits concurrency when introducing branches. If threads within the same warp diverge in a branch, the entire warp will be required to wait as much as it would have if all threads executed both branch statements. This can be optimized by the programmer, if the branch pattern can be recognized to group non divergent threads in the same warps
+
+Besides warps, threads are also grouped into blocks, which in turn are grouped int a grid. A block is the main organizational unit of threads. A single block can contain up to 1024 threads, and is assigned to a SM at the beggining of a kernel. The SM will later organize those threads into warps.
+
+A grid is nothing more than a collection of blocks, organized in a bidimensional space, where each block will be assigned to a specific SM to execute the kernel function.
+
+\subsubsection{Synchronization}
+\label{sec:cuda:model:sync}
+
+Having thousands of threads executing concurrently raises the issues of synchronization already familar from other parallel models. Sometimes a barrier is required to allow other threads to compute results that the current thread depends on.
+
+In CUDA, synchronization is implicitl within a single warp, since all threads of a warp will execute the same instruction. On a higher level, the CUDA primitive \texttt{\_\_syncthreads()} is available to create a barrier for all threads within a block, allowing the entire block to reach the same point.
+
+As for grid level synchronization, it is not possible within the GPU, since each SM will run their blocks independently, but it can be achieved by using different kernel calls, implicitly creating a synchronization point between kernels.
