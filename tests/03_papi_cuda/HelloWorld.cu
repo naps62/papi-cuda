@@ -25,7 +25,7 @@
 
 #include <cuda.h>
 #include <stdio.h>
-#include "papi_test.h"
+#include <papi.h>
 
 #define NUM_EVENTS 1
 #define PAPI
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
 	
 
 	// invoke the kernel
-	helloWorld<<< threads, blocks >>>(d_str);
+	kernel<<< threads, blocks >>>(d_str);
 
 	// retrieve the results from the device
 	cudaMemcpy(str, d_str, size, cudaMemcpyDeviceToHost);
