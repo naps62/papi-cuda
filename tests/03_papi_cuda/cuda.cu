@@ -31,7 +31,7 @@
 #define PAPI
 
 // Prototypes
-__global__ void helloWorld(char*);
+__global__ void kernel(int*);
 
 
 // Host function
@@ -119,7 +119,7 @@ int main(int argc, char** argv)
 	kernel<<< threads, blocks >>>(d_arr);
 
 	// retrieve the results from the device
-	cudaMemcpy(arr, d_ar, size, cudaMemcpyDeviceToHost);
+	cudaMemcpy(arr, d_arr, size, cudaMemcpyDeviceToHost);
 	
 	// free up the allocated memory on the device
 	cudaFree(d_arr);
@@ -133,7 +133,7 @@ int main(int argc, char** argv)
 		fprintf( stderr, "PAPI_stop failed\n" );
 
 	for( i = 0; i < NUM_EVENTS; i++ )
-		printf( "%12lld \t\t --> %s \n", values[i], EventName[i] );
+		printf( "%12lld \t\t --> %s \n", values[i], event_name[i] );
 #endif
 
 	return 0;
