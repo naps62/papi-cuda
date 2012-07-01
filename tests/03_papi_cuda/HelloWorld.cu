@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 
 	int threads = atoi(argv[1]);
 	int blocks = atoi(argv[2]);
-	char *event_name[];
+	char *event_name[NUM_EVENTS];
 	event_name[0] = argv[3];
 
 
