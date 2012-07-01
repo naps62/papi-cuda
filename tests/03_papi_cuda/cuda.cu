@@ -1,83 +1,146 @@
+/****************************/
+/* THIS IS OPEN SOURCE CODE */
+/****************************/
+
+/** 
+ * @file    HelloWorld.c
+ * CVS:     $Id$
+ * @author  Heike Jagode
+ *          jagode@eecs.utk.edu
+ * Mods:	<your name here>
+ *			<your email address>
+ * test case for Example component 
+ * 
+ *
+ * @brief
+ *  This file is a very simple HelloWorld C example which serves (together
+ *	with its Makefile) as a guideline on how to add tests to components.
+ *  The papi configure and papi Makefile will take care of the compilation
+ *	of the component tests (if all tests are added to a directory named
+ *	'tests' in the specific component dir).
+ *	See components/README for more details.
+ *
+ *	The string "Hello World!" is mangled and then restored.
+ */
+
 #include <cuda.h>
-#include <cupti.h>
 #include <stdio.h>
+#include <papi.h>
 
-#define N 10
-//#define THREADS 11
+#define NUM_EVENTS 1
+#define PAPI
 
-#define EVENT_NAME_00 "prof_trigger_00"
-#define EVENT_NAME_01 "prof_trigger_01"
-#define EVENT_NAME_02 "prof_trigger_02"
-#define EVENT_NAME_03 "prof_trigger_03"
+// Prototypes
+__global__ void helloWorld(char*);
 
-#define CHECK_CU_ERROR(err, cufunc)										\
-	if (err != CUDA_SUCCESS) { 											\
-		printf("%s:%d: error %d for CUDA Driver API function '%s'\n",	\
-				__FILE__, __LINE__, err, cufunc);						\
-		exit(-1);														\
+
+// Host function
+int main(int argc, char** argv)
+{
+#ifdef PAPI
+	if (argc != 4) {
+		printf("Usage: ./a.out <threads> <blocks> <counter_name>");
+		return -2;
 	}
 
-#define CHECK_CUPTI_ERROR(err, cuptifunc)								\
-	if (err != CUPTI_SUCCESS) {											\
-		const char *errstr;												\
-		cuptiGetResultString(err, &errstr);								\
-		printf("%s:%d:Error %s for CUPTI API function '%s'\n",			\
-				__FILE__, __LINE__, errstr, cuptifunc);					\
-		exit(-1);														\
+	int threads = atoi(argv[1]);
+	int blocks = atoi(argv[2]);
+	char *event_name[NUM_EVENTS];
+	event_name[0] = argv[3];
+
+
+	int retval, i;
+	int EventSet = PAPI_NULL;
+	long long values[NUM_EVENTS];
+	/* REPLACE THE EVENT NAME 'PAPI_FP_OPS' WITH A CUDA EVENT 
+	   FOR THE CUDA DEVICE YOU ARE RUNNING ON.
+	   RUN papi_native_avail to get a list of CUDA events that are 
+	   supported on your machine */
+    //char *EventName[] = { "PAPI_FP_OPS" };
+	int events[NUM_EVENTS];
+	
+	/* PAPI Initialization */
+	retval = PAPI_library_init( PAPI_VER_CURRENT );
+	if( retval != PAPI_VER_CURRENT )
+		fprintf( stderr, "PAPI_library_init failed\n" );
+	
+	printf( "PAPI_VERSION     : %4d %6d %7d\n",
+			PAPI_VERSION_MAJOR( PAPI_VERSION ),
+			PAPI_VERSION_MINOR( PAPI_VERSION ),
+			PAPI_VERSION_REVISION( PAPI_VERSION ) );
+	
+	/* convert PAPI native events to PAPI code */
+	for( i = 0; i < NUM_EVENTS; i++ ){
+		retval = PAPI_event_name_to_code( event_name[i], &events[i] );
+		if( retval != PAPI_OK )
+			fprintf( stderr, "PAPI_event_name_to_code failed\n" );
+		else
+			printf( "Name %s --- Code: %x\n", event_name[i], events[i] );
 	}
 
-typedef struct cupti_eventData_st {
-	CUpti_EventGroup eventGroup;
-	CUpti_EventID eventId;
-} cupti_eventData;
+	retval = PAPI_create_eventset( &EventSet );
+	if( retval != PAPI_OK )
+		fprintf( stderr, "PAPI_create_eventset failed\n" );
+	
+	retval = PAPI_add_events( EventSet, events, NUM_EVENTS );
+	if( retval != PAPI_OK )
+		fprintf( stderr, "PAPI_add_events failed\n" );
+	
+	retval = PAPI_start( EventSet );
+	if( retval != PAPI_OK )
+		fprintf( stderr, "PAPI_start failed\n" );
+#endif
 
-// Structure to hold data collected by callback
-typedef struct RuntimeApiTrace_st {
-	cupti_eventData *eventData;
-	uint64_t eventVal;
-} RuntimeApiTrace_t;
 
-void CUPTIAPI getEventValueCallback(
-						void *userdata,
-						CUpti_CallbackDomain domain,
-						CUpti_CallbackId cbid,
-						const CUpti_CallbackData *cbInfo) {
+	#define N 10
 
-	CUptiResult cuptiErr;
-	RuntimeApiTrace_t *traceData = (RuntimeApiTrace_t*) userdata;
-	size_t bytesRead;
+	int j;
+	
+	// desired output
+	int str[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-	// This callback is enabled for launch so we shouldn't see anything else.
-	if (cbid != CUPTI_RUNTIME_TRACE_CBID_cudaLaunch_v3020) {
-		printf("%s:%d: unexpected cbid %d\n", __FILE__, __LINE__, cbid);
-		exit(-1);
+	// mangle contents of output
+	// the null character is left intact for simplicity
+	for(j = 0; j < 12; j++) {
+		str[j] -= j;
+		//printf("str=%s\n", str);
 	}
+	
+	// allocate memory on the device
+	char *d_str;
 
-	switch(cbInfo->callbackSite) {
-		case CUPTI_API_ENTER:
-			cudaThreadSynchronize();
-			cuptiErr = cuptiSetEventCollectionMode(cbInfo->context, CUPTI_EVENT_COLLECTION_MODE_KERNEL);
-			CHECK_CUPTI_ERROR(cuptiErr, "cuptiSetEventCollectionMode");
-			cuptiErr = cuptiEventGroupEnable(traceData->eventData->eventGroup);
-			CHECK_CUPTI_ERROR(cuptiErr, "cuptiEventGroupEnable");
-			break;
+	cudaMalloc((void**)&d_str, sizeof(int) * N);
+	
+	// copy the string to the device
+	cudaMemcpy(d_str, str, size, cudaMemcpyHostToDevice);
+	
 
-		case CUPTI_API_EXIT:
-			bytesRead = sizeof(uint64_t);
-			cudaThreadSynchronize();
-			cuptiErr = cuptiEventGroupReadEvent(traceData->eventData->eventGroup, CUPTI_EVENT_READ_FLAG_NONE, traceData->eventData->eventId, &bytesRead, &traceData->eventVal);
-			CHECK_CUPTI_ERROR(cuptiErr, "cuptiEventGroupReadEvent");
-			cuptiErr = cuptiEventGroupDisable(traceData->eventData->eventGroup);
-			CHECK_CUPTI_ERROR(cuptiErr, "cuptiEventGroupDisable");
-			break;
-	}
+	// invoke the kernel
+	kernel<<< threads, blocks >>>(d_str);
+
+	// retrieve the results from the device
+	cudaMemcpy(str, d_str, size, cudaMemcpyDeviceToHost);
+	
+	// free up the allocated memory on the device
+	cudaFree(d_str);
+	
+	printf("END: %s\n", str);
+
+	
+#ifdef PAPI
+	retval = PAPI_stop( EventSet, values );
+	if( retval != PAPI_OK )
+		fprintf( stderr, "PAPI_stop failed\n" );
+
+	for( i = 0; i < NUM_EVENTS; i++ )
+		printf( "%12lld \t\t --> %s \n", values[i], EventName[i] );
+#endif
+
+	return 0;
 }
 
-static void displayEventVal(RuntimeApiTrace_t *trace, char *eventName) {
-	printf("Event Name: %s \n", eventName);
-	printf("Event Value: %llu\n", (unsigned long long) trace->eventVal);
-}
 
+// Device kernel
 __global__ void kernel(int *arr) {
 	// should return 11
 	__prof_trigger(00);
@@ -90,103 +153,4 @@ __global__ void kernel(int *arr) {
 
 	if (arr[id] < 4) __prof_trigger(02); //should yield 4
 	else             __prof_trigger(03); //should yield 6
-}
-
-int main(int argc, char **argv) {
-	int deviceCount;
-	CUcontext context = 0;
-	CUdevice dev = 0;
-	char deviceName[32];
-	char *eventName;
-	CUptiResult cuptiErr;
-	CUpti_SubscriberHandle subscriber;
-	cupti_eventData cuptiEvent;
-	RuntimeApiTrace_t trace;
-	int cap_major, cap_minor;
-
-	CUresult err = cuInit(0);
-	CHECK_CU_ERROR(err, "cuInit");
-
-	err = cuDeviceGetCount(&deviceCount);
-	CHECK_CU_ERROR(err, "cuDeviceGetCount");
-
-	if (deviceCount == 0) {
-		printf("There is no device supporting CUDA.\n");
-		return -2;
-	}
-
-	if (argc < 3) {
-		printf("Usage: ./a.out <num_threads> <event_name>\n");
-		return -2;
-	}
-
-	err = cuDeviceGet(&dev, 0);
-	CHECK_CU_ERROR(err, "cuDeviceGet");
-
-	err = cuDeviceGetName(deviceName, 32, dev);
-	CHECK_CU_ERROR(err, "cuDeviceGetName");
-
-	err = cuDeviceComputeCapability(&cap_major, &cap_minor, dev);
-	CHECK_CU_ERROR(err, "cuDeviceComputeCapability");
-
-	printf("CUDA Device Name: %s\n", deviceName);
-	printf("CUDA Capability: %d.%d\n", cap_major, cap_minor);
-
-	err = cuCtxCreate(&context, 0, dev);
-	CHECK_CU_ERROR(err, "cuCtxCreate");
-
-	cuptiErr = cuptiEventGroupCreate(context, &cuptiEvent.eventGroup, 0);
-	CHECK_CUPTI_ERROR(cuptiErr, "cuptiEventGroupCreate");
-
-	int threads = atoi(argv[1]);
-	/*switch(atoi(argv[1])) {
-		case 0: eventName = EVENT_NAME_00; break;
-		case 1: eventName = EVENT_NAME_01; break;
-		case 2: eventName = EVENT_NAME_02; break;
-		case 3: eventName = EVENT_NAME_03; break;
-		default:
-			printf("Invalid trigger num: %d\n", atoi(argv[1]));
-			return -2;
-	}*/
-	eventName = argv[2];
-
-	cuptiErr = cuptiEventGetIdFromName(dev, eventName, &cuptiEvent.eventId);
-	if (cuptiErr != CUPTI_SUCCESS) {
-		printf("Invalid eventName: %s\n", eventName);
-		return -1;
-	}
-
-	cuptiErr = cuptiEventGroupAddEvent(cuptiEvent.eventGroup, cuptiEvent.eventId);
-	CHECK_CUPTI_ERROR(cuptiErr, "cuptiEventGroupAddEvent");
-
-	trace.eventData = &cuptiEvent;
-
-	cuptiErr = cuptiSubscribe(&subscriber, (CUpti_CallbackFunc)getEventValueCallback, &trace);
-	CHECK_CUPTI_ERROR(cuptiErr, "cuptiSubscribe");
-
-	cuptiErr = cuptiEnableCallback(1, subscriber, CUPTI_CB_DOMAIN_RUNTIME_API, CUPTI_RUNTIME_TRACE_CBID_cudaLaunch_v3020);
-	CHECK_CUPTI_ERROR(cuptiErr, "cuptiEnableCallback");
-
-
-	int host_arr[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-	int *dev_arr;
-	
-
-	cudaMalloc(&dev_arr, sizeof(int) * N);
-	cudaMemcpy(dev_arr, &host_arr, sizeof(int) * N, cudaMemcpyHostToDevice);
-	kernel<<< threads, 1 >>>(dev_arr);
-
-	displayEventVal(&trace, eventName);
-	trace.eventData = NULL;
-
-	cuptiErr = cuptiEventGroupRemoveEvent(cuptiEvent.eventGroup, cuptiEvent.eventId);
-	CHECK_CUPTI_ERROR(cuptiErr, "cuptiEventGroupRemoveEvent");
-
-	cuptiErr = cuptiEventGroupDestroy(cuptiEvent.eventGroup);
-	CHECK_CUPTI_ERROR(cuptiErr, "cuptiEventGroupDestroy");
-
-	cuptiErr = cuptiUnsubscribe(subscriber);
-	CHECK_CUPTI_ERROR(cuptiErr, "cuptiUnsubscribe");
-
-	cudaDeviceSynchronize();
 }
