@@ -511,7 +511,7 @@ int main(int argc, char *argv[]) {
 	BVHAccel *bvh;
 	Geometry *geometry = new Geometry(); // include object and light areas
 
-	ParseSceneFile(camera, geometry,  "/home/naps62/projects/workspace/pathtracer13/");
+	ParseSceneFile(camera, geometry,  getenv("PWD"));
 
 	bvh = new BVHAccel(geometry->triangleCount, geometry->triangles, geometry->vertices);
 

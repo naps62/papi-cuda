@@ -15,7 +15,8 @@
 #define MAX_PATH_DEPTH 5
 #define SPP 1
 #define SHADOWRAY 4
-#define SCENE_FILE "/home/naps62/projects/workspace/pathtracer13/scenes/luxball.scn"
+
+#define SCENE_FILE "scenes/luxball.scn"
 
 #define PIXEL_COUNT (WIDTH * HEIGHT)
 #define PATH_COUNT (PIXEL_COUNT * SPP)

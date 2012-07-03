@@ -1,0 +1,19 @@
+ply
+format ascii 1.0
+comment Created by Blender3D 248 - www.blender.org, source file: sponza.blend
+element vertex 4
+property float x
+property float y
+property float z
+property uchar red
+property uchar green
+property uchar blue
+element face 2
+property list uchar uint vertex_indices
+end_header
+20.137825 12.032759 66.580315 255 255 255
+31.237354 15.698827 62.827110 255 255 255
+35.087761 4.041189 62.827110 255 255 255
+23.988230 0.375122 66.580315 255 255 255
+3 0 1 2 
+3 0 2 3 

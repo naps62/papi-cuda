@@ -1,6 +1,22 @@
+HOSTNAME = $(shell hostname)
+UNAME = $(shell uname)
 CXX = nvcc
+
+MODE ?= RLS
+
+ifeq ($(HOSTNAME),search.di.uminho.pt)
 CXXFLAGS = -I ./include,/share/apps/boost/include,$(HOME)/include
 LDFLAGS = -L /share/apps/boost/lib,$(HOME)/lib,$(HOME)/lib,/usr/local/cuda/extras/CUPTI/lib64 -lcupti -lglut -lboost_system
+else
+ifeq ($(UNAME),Darwin)
+CXXFLAGS = -I ./include
+LDFLAGS = -L /usr/local/cuda/lib,/usr/local/cuda/extras/CUPTI/lib -lcuda -lcupti -lboost_system-mt -Xlinker -framework,OpenGL,-framework,GLUT -arch=sm_20
+endif
+endif
+
+ifeq ($(MODE),DBG)
+CXXFLAGS += -g
+endif
 
 COMPILE.cu = $(COMPILE.cc)
 
