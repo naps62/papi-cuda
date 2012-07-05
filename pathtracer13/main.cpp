@@ -21,6 +21,8 @@
 
 #include <boost/thread/mutex.hpp>
 
+#include "papitest.h"
+
 void checkCUDAmemory(char* t) {
 
 	//cudaDeviceSynchronize();
@@ -36,7 +38,9 @@ void checkCUDAError(char* t) {
 	if (cudaSuccess != err) {
 		fprintf(stderr, "Cuda error %s: %s.\n", t, cudaGetErrorString(err));
 
-		checkCUDAmemory("");
+		char * tmp = strdup(string("").c_str());
+		checkCUDAmemory(tmp);
+		free(tmp);
 
 		exit(-1);
 	}
@@ -511,7 +515,7 @@ int main(int argc, char *argv[]) {
 	BVHAccel *bvh;
 	Geometry *geometry = new Geometry(); // include object and light areas
 
-	ParseSceneFile(camera, geometry,  getenv("PWD"));
+	ParseSceneFile(camera, geometry,  "/home/cpd19830/cg/ifr/pi/github/pathtracer13/");
 
 	bvh = new BVHAccel(geometry->triangleCount, geometry->triangles, geometry->vertices);
 
@@ -530,6 +534,20 @@ int main(int argc, char *argv[]) {
 	PERFORM_acc_timer* timer = new PERFORM_acc_timer();
 
 #ifdef CUDA
+
+	CUptiResult cuptiErr;
+	CUpti_SubscriberHandle subscriber;
+	RuntimeApiTrace_t trace;
+
+	cuptiErr = cuptiSubscribe(&subscriber, (CUpti_CallbackFunc) getEventValueCallback, &trace);
+	CHECK_CUPTI_ERROR(cuptiErr, "cuptiSubscribe");
+
+	cuptiErr = cuptiEnableCallback(1, subscriber, CUPTI_CB_DOMAIN_RUNTIME_API, CUPTI_RUNTIME_TRACE_CBID_cudaLaunch_v3020);
+	CHECK_CUPTI_ERROR(cuptiErr, "cuptiEnableCallback");
+
+	fprintf(stderr, "\n\n\nSTARTING PAPI\n\n\n");
+	papiTestInit(argc-1, argv+1);
+
 
 	timer->start();
 
@@ -589,7 +607,11 @@ int main(int argc, char *argv[]) {
 
 	timer->stop();
 
-	checkCUDAmemory("");
+	{
+		char * tmp = strdup("");
+	checkCUDAmemory(tmp);
+		free(tmp);
+	}
 
 #else
 
@@ -642,6 +664,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	timer->stop();
+
+	papiTestCleanup();
 
 #endif
 

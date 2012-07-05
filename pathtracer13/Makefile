@@ -4,9 +4,9 @@ CXX = nvcc
 
 MODE ?= RLS
 
-ifeq ($(HOSTNAME),search.di.uminho.pt)
-CXXFLAGS = -I ./include,/share/apps/boost/include,$(HOME)/include
-LDFLAGS = -L /share/apps/boost/lib,$(HOME)/lib,$(HOME)/lib,/usr/local/cuda/extras/CUPTI/lib64 -lcupti -lglut -lboost_system
+ifeq ($(HOSTNAME),compute-611-2.local)
+CXXFLAGS = -I ./include,/share/apps/boost/include,$(HOME)/include,/usr/local/cuda/extras/CUPTI/include,/usr/local/papi4cuda/include
+LDFLAGS = -L /share/apps/boost/lib,$(HOME)/lib,$(HOME)/lib,/usr/local/cuda/extras/CUPTI/lib64,/usr/local/papi4cuda/lib -lcupti -lglut -lboost_system -lpapi
 else
 ifeq ($(UNAME),Darwin)
 CXXFLAGS = -I ./include
@@ -15,7 +15,8 @@ endif
 endif
 
 ifeq ($(MODE),DBG)
-CXXFLAGS += -g
+CXXFLAGS += -g -G
+$(warning DEBUGGING)
 endif
 
 COMPILE.cu = $(COMPILE.cc)
@@ -45,7 +46,8 @@ pathtracer:\
 	bvhaccel.o \
 	transform.o \
 	matrix4x4.o \
-	bbox.o
+	bbox.o	\
+	papitest.o
 	@echo -e "\tLNK\t$@";
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) $^ $(LDFLAGS) $(LOADLIBES) $(LDLIBS) $(OUTPUT_OPTION)
 

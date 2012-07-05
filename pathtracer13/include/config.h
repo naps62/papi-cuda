@@ -22,6 +22,6 @@
 #define PATH_COUNT (PIXEL_COUNT * SPP)
 #define SEED 54654654
 
-//#define CUDA
+#define CUDA
 
 #endif /* CONFIG_H_ */
