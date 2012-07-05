@@ -35,16 +35,20 @@ void CUPTIAPI getEventValueCallback(void * userData, CUpti_CallbackDomain domain
 	switch (cbInfo->callbackSite) {
 		case CUPTI_API_ENTER:
 			// start PAPI
-			retval = PAPI_start(set);
-			if (retval != PAPI_OK)
-				fprintf(stderr, "PAPI_start failed with code %d\n", retval);
+			if (eventcnt) {
+				retval = PAPI_start(set);
+				if (retval != PAPI_OK)
+					fprintf(stderr, "PAPI_start failed with code %d\n", retval);
+			}
 			break;
 		case CUPTI_API_EXIT:
 			// stop PAPI
-			retval = PAPI_stop(set, values);
-			if (retval != PAPI_OK)
-				fprintf(stderr, "PAPI_stop failed with code %d\n", retval);
-			printf("VALUES:\n");
+			if (eventcnt) {
+				retval = PAPI_stop(set, values);
+				if (retval != PAPI_OK)
+					fprintf(stderr, "PAPI_stop failed with code %d\n", retval);
+				printf("VALUES:\n");
+			}
 			for (int i = 0; i < eventcnt; ++i)
 				printf("\t%s\t%x\t%lld\n", names[i], events[i], values[i]);
 			break;
@@ -84,17 +88,19 @@ void papiTestInit(int argc, char * argv[]) {
 		names[i] = tmp_names[i];
 		events[i] = tmp_events[i];
 	}
+	memset(values, 0, sizeof(long long int));
 
 	free(tmp_names);
 	free(tmp_events);
 
+	set = PAPI_NULL;
 	retval = PAPI_create_eventset(&set);
 	if (retval != PAPI_OK)
 		fprintf(stderr, "PAPI_create_eventset failed with code %d\n", retval);
 
 	retval = PAPI_add_events(set, events, eventcnt);
 	if (retval != PAPI_OK)
-		fprintf(stderr, "PAPI_create_eventset failed with code %d\n", retval);
+		fprintf(stderr, "PAPI_add_events failed with code %d\n", retval);
 }
 
 void papiTestCleanup() {

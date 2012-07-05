@@ -1,0 +1,11 @@
+# CUDA_PROFILE_LOG_VERSION 2.0
+# CUDA_DEVICE 0 Tesla M2070
+# CUDA_CONTEXT 1
+# TIMESTAMPFACTOR fffff6b7a39280d0
+method,gputime,cputime,occupancy
+method=[ memset128 ] gputime=[ 48.608 ] cputime=[ 15.000 ] occupancy=[ 0.333 ] 
+method=[ memcpyHtoD ] gputime=[ 5334.752 ] cputime=[ 5818.000 ] 
+method=[ memcpyHtoD ] gputime=[ 5925.120 ] cputime=[ 6245.000 ] 
+method=[ memcpyHtoD ] gputime=[ 1518.880 ] cputime=[ 1889.000 ] 
+method=[ _Z6kernel17PerspectiveCameraP3RGBP17BVHAccelArrayNodeP5PointP6NormalS1_P8TriangleP13TriangleLight8GeometryP7prePath ] gputime=[ 1693310.750 ] cputime=[ 576.000 ] occupancy=[ 0.333 ] 
+method=[ memcpyDtoH ] gputime=[ 1544.640 ] cputime=[ 1695113.000 ] 
