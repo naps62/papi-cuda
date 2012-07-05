@@ -10,5 +10,6 @@ Contrary to a CPU, which focus on executing a small amount of threads quickly, b
 Of course, since the programming model is completely different, a CPU thread isn't comparable in any way to a CUDA thread. For example, while a simple algorithm might consist in looping through a collection of elements, applying an operation to each one, in CUDA a more suitable model would be to launch one thread for each element, and let the hardware scheduler manage them.
 
 \input{report/310-model}
-
-\input{report/320-prof}
+\input{report/320-cupti}
+\input{report/330-cmd-prof}
+\input{report/340-visual-prof}

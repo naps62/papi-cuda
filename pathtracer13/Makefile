@@ -11,6 +11,11 @@ else
 ifeq ($(UNAME),Darwin)
 CXXFLAGS = -I ./include
 LDFLAGS = -L /usr/local/cuda/lib,/usr/local/cuda/extras/CUPTI/lib -lcuda -lcupti -lboost_system-mt -Xlinker -framework,OpenGL,-framework,GLUT -arch=sm_20
+else
+ifeq ($(HOSTNAME),naps62-mint)
+CXXFLAGS = -I ./include,/share/apps/boost/include,$(HOME)/include,/usr/local/cuda/extras/CUPTI/include,/usr/local/papi4cuda/include
+LDFLAGS = -L /share/apps/boost/lib,$(HOME)/lib,$(HOME)/lib,/usr/local/cuda/extras/CUPTI/lib64,/usr/local/papi4cuda/lib -lcupti -lglut -lboost_system -lpapi
+endif
 endif
 endif
 

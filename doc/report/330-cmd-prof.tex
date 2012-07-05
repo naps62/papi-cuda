@@ -1,0 +1,18 @@
+\section{Command Line Profiler}
+\label{sec:330}
+
+Besides the CUPTI APIs, NVidia also created the Command Line Profiler, providing simpler profiling support for CUDA applications, and more recently, OpenCL as well.
+
+This profiler works in a unobtrusive way, allowing previously compiled applications to be targeted with some degree of profiling. This also requires almost no effort from the programmer, who only has to specify some environment variables, indicating the CUDA driver that he wants the profiling to be done.
+
+Given the simplicity, which is good for when only a rough idea about the profiling results is required, there are obvious drawbacks when compared to more powerful and feature heavy profilers like CUPTI.
+
+First of all, since CUPTI is nothing more than a API to allow communication with the CUDA driver and retrieve hardware level information, it can certainly be more tailored to specific needs, providing only the desired results, and measuring nothing more than necessary, making the output also more efficient and user friendly.
+
+With the command line tool, the degree of customization is extremely low. One might want to measure two kernels of the same application using different counters. With CUPTI this simply means two event sets that are initialized at different kernel launches. But with the command profiler, either both kernels are measured for both event sets, or two different executions are required, with each one receiving a different counter list.
+
+Aside from that, the same counters from CUPTI are available. They are specified using an environment variable linking to a file that contains one counter name per line. Some counters are incompatible, meaning they cannot be measured in the same run (this can also be an issue in CUPTI, although its solvable by measuring two event sets separately).
+
+The output can either be in the raw profiler format, or in CSV format. But event though a CSV file can easily be parsed into a spreadsheet, the output can still be badly organized. Each line in the file corresponds to a single kernel call, with the columns specifying each counter value for that launch. If counters from different domains are requested at the sametime, the output will not be as much organized as it would be desirable.
+
+In conclusion, this profiler sees it's best use when only a small amount of information is required, with little to no data treatment, and where CUPTI would require unnecessary effort to program.
