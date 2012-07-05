@@ -1,19 +1,21 @@
+#include <cstdio>
+
 #include <papi.h>
 
-#define PAPI_ERROR(n,v) (fprintf("%s failed with code %d\n", (n), (v)))
+#define PAPI_ERROR(n,v) (fprintf(stderr, "%s failed with code %d\n", (n), (v)))
 
 
 
 __global__
 void kernel () {
-	int blockX = blockIdx.x;
-	int blockY = blockIdx.y;
+	//int blockX = blockIdx.x;
+	//int blockY = blockIdx.y;
 
-	int threadX = threadIdx.x;
-	int threadY = threadIdx.y;
-	int threadZ = threadIdx.z;
+	//int threadX = threadIdx.x;
+	//int threadY = threadIdx.y;
+	//int threadZ = threadIdx.z;
 
-	cuPrintf("[%d,%d]\t[%d,%d,%d]\n", blockX, blockY, threadX, threadY, threadZ);
+	//cuPrintf("[%d,%d]\t[%d,%d,%d]\n", blockX, blockY, threadX, threadY, threadZ);
 }
 
 
@@ -89,17 +91,20 @@ int main (int argc, char * argv[]) {
 		PAPI_ERROR("PAPI_start", retval);
 
 
-	cudaPrintfInit();
+	//cudaPrintfInit();
 	kernel<<< nblocks, nthreads >>>();
-	cudaPrintfDisplay(stdout, true);
-	cudaPrintfEnd();
+	//cudaPrintfDisplay(stdout, true);
+	//cudaPrintfEnd();
 
 
 
 
-	retval = PAPI_stop(set);
+	retval = PAPI_stop(set, values);
 	if (retval != PAPI_OK)
 		PAPI_ERROR("PAPI_stop", retval);
+	
+	for (int i = 0; i < eventcnt; ++i)
+		printf("%s\t%x\t%lld\n", names[i], events[i], values[i]);
 
 
 
