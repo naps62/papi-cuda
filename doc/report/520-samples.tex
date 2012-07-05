@@ -1,0 +1,29 @@
+\section{Profiling Tests}
+\label{sec:520}
+
+Apart from the path tracer test case, some small samples were created to have some more practical knowledge on the workflow and implementation details of each profiler. These samples, although not providing direct results, were useful to understand some of the important features and drawbacks from each available option. This section explains the observed pros and cons. Note that actual results measured from this samples were mostly useless, and so were excluded from the document.
+
+\subsection{Command Line Profiler}
+\label{sec:521}
+
+As already stated in \cref{sec:330}, this profiler benefits the most from its usage simplicity. No code changes or recompilations are required whatsoever, and by measuring the right counters, it is possible to identify some possible bottlenecks, and only then move to a more deep profiling methodology.
+
+Of course, that simplicity can sometimes be too much, preventing more customized profiling to be done. The output is also pretty much raw data, requiring some external manipulation (manual or by scripting for example). It becomes especially messy when dealing with multiple calls for different kernels in the same execution.
+
+\subsection{CUPTI}
+\label{sec:522}
+
+In a naive approach, can be used to achieve the exact same result as the Command Line Profiler, but of course, that's not where it excels. By using CUPTI, the programmer is directly dealing with the API calls for the CUDA driver, and has access to low level options that allow deep levels of customization. The Callback API is particularly useful when using more complex and heterogeneous applications, where multiple kernels are being profiled at the same time. Each kernel can have specific optimization approaches (e.g. eliminate divergence, maximize occupancy, optimize memory usage), and the programmer can use that knowledge to is advantage, by measuring each kernel exactly how he wants, using different event sets for each one.
+Runtime data manipulation can also be done, since counter values are immediately available, instead of being dumped to a file.
+
+Overall, it is the most versatile of all profilers tested. The main drawback being the more difficult usage, since the code written deals directly with the driver, meaning that some low level knowledge of the architecture and the environment is even more essential.
+
+\subsection{Visual Profiler}
+\label{sec:533}
+
+\todopfac{Queres dizer tu qualquer coisa aqui? basicamente dizer que isto é baseado no cupti (ou estou enganado?) mas que obviamente não tem o mesmo nivel de personalização. em contrapartida, GUI's rock}
+
+\subsection{PAPI CUDA}
+\label{sec:534}
+
+\todonaps{usar primeiro o sample, falar depois}
