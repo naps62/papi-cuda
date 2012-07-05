@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<session version="1" name="20120705" hscale="4.500493399680803E-8">
+<executable file="/home/cpd19830/cg/ifr/pi/github/pathtracer13/pathtracer" cwd="/home/cpd19830/cg/ifr/pi/github/pathtracer13"><envs></envs></executable>
+<expert><columnprops><column kind="NAME" width="138"/></columnprops>
+<columnorder><column kind="NAME"/><column kind="START_TIME"/><column kind="DURATION"/><column kind="GRID_SIZE"/><column kind="BLOCK_SIZE"/><column kind="REGS_PER_THREAD"/><column kind="STAT_SHARED_MEM"/><column kind="DYNA_SHARED_MEM"/><column kind="BYTE_SIZE"/><column kind="THROUGHPUT"/><column kind="METRIC" label="dram_write_throughput"/><column kind="METRIC" label="dram_read_throughput"/><column kind="METRIC" label="inst_replay_overhead"/><column kind="METRIC" label="global_cache_replay_overhead"/><column kind="METRIC" label="shared_replay_overhead"/><column kind="METRIC" label="gst_efficiency"/><column kind="METRIC" label="local_replay_overhead"/><column kind="METRIC" label="warp_execution_efficiency"/><column kind="METRIC" label="gld_efficiency"/><column kind="EVENT" label="inst_issued"/><column kind="EMPTY"/></columnorder>
+</expert>
+<analysis><visitedstages><stage name="TIMELINE"/><stage name="KERNEL_INSTRUCTION"/><stage name="KERNEL_MEMORY"/><stage name="MULTIPROCESSOR"/></visitedstages></analysis>
+<vruler width="200"/>
+<hruler roiEnable="false"/>
+<timelinestate>
+<timeline pathname="15369" kind="PROCESS" containerstate="OPEN_ALL" filtered="false"/>
+<timeline pathname="15369/8496960" kind="THREAD" containerstate="OPEN_ALL" filtered="false"/>
+<timeline pathname="15369/8496960/Runtime API" kind="RUNTIME" containerstate="OPEN_ALL" filtered="false"/>
+<timeline pathname="15369/8496960/Driver API" kind="DRIVER" containerstate="OPEN_ALL" filtered="false"/>
+<timeline pathname="Tesla M2070" kind="DEVICE" containerstate="OPEN_ALL" filtered="false"/>
+<timeline pathname="Tesla M2070/1" kind="CONTEXT" containerstate="OPEN_ALL" filtered="false"/>
+<timeline pathname="Tesla M2070/1/MemCpy (HtoD)" kind="MEMCPY_HTOD" containerstate="OPEN_ALL" filtered="false"/>
+<timeline pathname="Tesla M2070/1/MemCpy (DtoH)" kind="MEMCPY_DTOH" containerstate="OPEN_ALL" filtered="false"/>
+<timeline pathname="Tesla M2070/1/Compute" kind="KERNELS" containerstate="OPEN_ALL" filtered="false"/>
+<timeline pathname="Tesla M2070/1/Compute/_Z6kernel17PerspectiveCameraP3RGBP17BVHAccelArrayNodeP5PointP6NormalS1_P8TriangleP13TriangleLight8GeometryP7prePath" kind="KERNEL" containerstate="OPEN_ALL" filtered="false"/>
+<timeline pathname="Tesla M2070/1/Compute/memset (0)" kind="KERNEL" containerstate="OPEN_ALL" filtered="false"/>
+<timeline pathname="Tesla M2070/1/Streams" kind="STREAMS" containerstate="OPEN_ALL" filtered="false"/>
+<timeline pathname="Tesla M2070/1/Streams/1" kind="STREAM" containerstate="OPEN_ALL" filtered="false"/>
+</timelinestate>
+<pdm>
+H4sIAAAAAAAAAI2Xf2xTVRTHb3+u3UC6seEA54qbUuvUlo2t24iWsYwqY74wVKKYUcoLLXZ7S1t1mAwGktBhgr+IKX+oRGM0oGZGifMfrT83IAhMSfQPE0jQLPEPyaJxJib13nff6e49W9O95PScd7+fd+67993bdx6xEmIi1AxfRm27moyH3VvX+Vp8ZnqapNb3RPPTamJAjftbFDWRHFQjqdiz6qZwv5oIK43bNnco/paOx0IbIxE1vjGRCO/v0faoynpFiw2klOYeLdEfjvf6+5TA9kQsPLA3rir+Rgi7Y3ujqcBmVetXU4n9SstgQlXCqSjtldioVVLLbrGwU5L+SD8lzg2EBN87pN8xcH5qrq+5Pl5nkjizwDHh1Fquv580S5xF4GqphV7gOnH3SpwV5Zuu47pv9FGJs6F8oFfbT0ucHeUjpVwPhD6QuBKUD/S09r3EOQSOxZnXue4+LXNOgWPxzY+5/vJXMleKONCHvpO5MsSBvuuczC2h8cWDcxzomFuKuNBFroMH7hYaJ7dqA5jzXZG5ZTTepmkp4ECvvipzLhoPxFIacKBjrpzGXsvZ/P2RX7i+4y+Zq6DxMW/NWeCCs1wHD9xyYbxs7LOWCb7+XpmSOHayW1gH0ye4Pr067bUIXJXBWQ2DY9x4UOI+mv6cvMMYdr2njuuutTLH9lHKyMX6Hmvmuu8ZmWM5IvFwUs/Hkg9zXflG5uCemLcLemBC5mwC5xR09wWZsyMOdMyVFOAcl2TOYejAgX7ZZJI4J8o3buM6eHEfWRbgTjllrgzlAx1zbB+lSw6cxFx6qcyxtXS8yvYZcKBjju2jN8kybzGO7SPvp+RF4AbLuQ5e3EdsPRfjyhG3o4rr4MV9JM5LIW45yhdcyXXw4j5aDFeFOE8N18EDtwLdXyHuVsS51nAdPHDVqN9C3MoC3Gy9zK1CHOiYW03jyl1xDXPXPDJ3GxoH6JirQf2CPtkgc7cjDnTM1S6Sc9O497lUF3BjPq6DB24NjbvDu9Vi3B00fkoYb6aJ6+CBY3+fmrk4V09jEz0wNxKQuTtZTA/gQMfcXexk9KiGuegGmWN/68foiws40DHnoXG7MF7QlaDM3Y3WAeiY8y6Suwc930An18ED17BI7l7UrzvEdfDA3UfjVCIcKcbdT3h9gDlHt8z5CK838u+P7oU5PxoH6Dcfkbl1RF4voGOuEY0X9J97Za6JxpeEdQq60maWuPU0flvgQMdcM34eD3AdPHAtRN5HhbgAjd8V+nV3cB08cK2o30JcG41zRj72bnd0cT3jsUhcu9DvDDVPO6+rJifk+mqLMc8slz5zM38bpfc/xoyz3yX6/9DQSLleP7F3LPM+4zoyQi1L5oo0akF2n7k5g+8XyOiE/gyvm8lCbvx5Rm/rHCvT68H6J/n3hsh1Gt3ANdd+/VLXrdmdOnvE9uG8a7oIr8/gGpJp0/X6fz/RWeuByXnXhIR5MbMi8Mbjuv5tdJ8+h9ahw14LuuZhauxdq7eb2sie13hde2Tnvnlsg2EsdhkGczJ3ZCwPEf5NZTbGwLjZC0eD7N2qUWM6qwdZaXeydPi3EqHtB2pN5uOjdqHtHLW3WrNnhmcqg9DGyse+Qy9dWfXq7w9C23nhLqDtpwXarlJb8cV/z5+PVuTzTVHrUSOHKzpb820/Unsj6/8jOnVd7yO/Jox5Va7zT8fLtaZ5z6LD4HO53MH/AWsGXYTyDwAA</pdm>
+</session>
