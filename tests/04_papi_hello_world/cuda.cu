@@ -25,7 +25,7 @@
 
 #include <cuda.h>
 #include <stdio.h>
-#include "papi_test.h"
+#include <papi.h>
 
 #define NUM_EVENTS 1
 #define PAPI
