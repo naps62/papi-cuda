@@ -1,9 +1,10 @@
 \section{PAPI CUDA}
 \label{sec:papi-cuda}
 
-\todo[inline]{Talk about PAPI's API for CUDA, via CUPTI}
-\todopfac{Se quiseres fala aqui daquilo que achas que está bem/mal com a forma de utilizar o PAPI}
-
 PAPI CUDA is an attempt to create a CUDA component to integrate with the PAPI API, allowing for the same simple workflow of the library to add and remove counters, retrieve values. This component is implemented based on CUPTI, and works as an abstraction layer to the Driver calls required when using raw CUPTI code.
 
-In order to use this component, PAPI must be compiled with the appropriate options, linking with the CUDA and CUPTI directories
+The underlying implementation of this CUDA component actually uses CUPTI on the background, and attempts to serve as a wrapper for it, by providing an already known, and possibly simpler API to register and measure even sets.
+
+In order to use the component, PAPI must be compiled with the appropriate options, linking with the CUDA and CUPTI directories.
+
+Calls to the CUDA component of PAPI are similar to the CUPTI profiler. Events are firt registered into a group, which can be started and stopped with the appropriate API calls. However, unlike a CPU where the starting and end points of profiling can be more easily measured (at least for a single threaded application), this is not true for a CUDA application, where the GPU might be working asynchronously with various streams of requests to process. At this point, CUPTI Callbacks API becomes crucial for enabling event group measurements automatically at each kernel startup. The lack of such a feature for PAPI CUDA might result in erroneous results due to unforesseen work also being processed on the GPU.
