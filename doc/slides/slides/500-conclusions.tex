@@ -1,0 +1,38 @@
+\section{Conclusions}
+
+\frame{
+	\frametitle{Conclusions - NVidia profilers}
+
+	\begin{itemize}\itemsep=15pt
+		\item 3 official profiling methodologies
+			\begin{itemize}
+				\item \textbf{Command Line}: Fast to use
+				\item \textbf{Visual Profiler}: More user friendly
+				\item \textbf{CUPTI}: Full driver access
+			\end{itemize}
+
+		\item Each one can have different purposes/applications
+
+		\item Given their purpose, they get the job done
+
+		\item Limitations come mostly from Hardware and/or Driver
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Conclusions - PAPI CUDA}
+
+	\begin{itemize}\itemsep=15pt
+		\item Attempt to wrap CUPTI in a known API
+
+		\item Small subset of its features (Callback API seems crutial!)
+
+		\item Will probably fail at profiling asynchronous or multi threaded applications
+
+		\item Still requires CUPTI's help for more complex tasks
+		\begin{itemize}
+			\item[-] \textit{So why not just use CUPTI instead?}
+		\end{itemize}
+	\end{itemize}
+
+}
