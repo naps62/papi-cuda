@@ -1,0 +1,25 @@
+\section{PAPI CUDA}
+
+\begin{frame}
+	\frametitle{PAPI CUDA}
+	\begin{itemize}
+		\item Uses CUPTI;
+		\begin{itemize}
+			\item Supposed to be a wrapper;
+		\end{itemize}
+		\vfill
+		\item [+] Approach to GPU counters is similar to CPU;
+		\vfill
+		\item [-] Requires the same ``garbage'' code;
+		\vfill
+		\item Works best when used with CUPTI Callbacks;
+		\begin{itemize}
+			\item It should replace them;
+			\item Tests performed only obtained the measurements for the global kernel;
+			\begin{itemize}
+				\item Subkernels were ignored;
+				\item Highly verbose preparation does not allow to discard programmer error;
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+\end{frame}
