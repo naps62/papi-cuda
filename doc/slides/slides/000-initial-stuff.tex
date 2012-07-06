@@ -22,17 +22,21 @@
 	\frametitle{GPU Profiling}
 
 	\begin{block}{Limitations}
-		\begin{itemize}\itemsep=10pt
+		\begin{itemize}%\itemsep=10pt
 			\item Several Streaming Multiprocessors, but not all area measured
-				\begin{itemize}
-					\item Before Compute Capability 2.0, only 1 SM was measured
-					\item Later versions measure more than one (but still not all!)
-				\end{itemize}
+				% \begin{itemize}
+					% \item Before Compute Capability 2.0, only 1 SM was measured
+					% \item Later versions measure more than one (but still not all!)
+				% \end{itemize}
 			\item Harder to profile heterogeneous kernels
 
 			\item Counters have different domains. Results may overlap
 
 			\item Multi-context CUDA apps still lack support
 		\end{itemize}
+
+		\begin{figure}
+			\includegraphics[height=.45\paperheight]{../images/fermi.jpeg}
+		\end{figure}
 	\end{block}
 }
