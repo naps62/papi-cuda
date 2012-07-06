@@ -1,2 +1,10 @@
 \subsection{Common Limitations}
 \label{sec:610}
+
+Despite all of the explained differences, some characteristics remain the same between profiles. These are mostly because of features or limitations of the drivers and the hardware itself, that serve as a common factor for each case.
+
+One of the main things that seems to be missing from current CUDA profilers is the possiblity to profile inside the kernel. Current frameworks only allow profiling to be measured for some or all kernel calls. This means that all results refer to the entire kernel call. An exception can be made on this, due to the existance of the general-purporse counters, that can be incremented at will inside kernel code.
+
+However, this counters also have limitations, as they will always profile at warp-level (each call to the necessary function will increment the counter by 1 for each warp it is executed on). This poses obvious limitations when the required measurements are more fine-grained, for example, for thread-level counters.
+
+Lack of some important documentation from NVidia can sometimes be a problem as well, as some specific architectural details are undisclosed, and could be important factors in some cases. 
