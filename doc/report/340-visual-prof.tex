@@ -1,4 +1,12 @@
 \subsection{Visual Profiler}
 \label{sec:340}
 
-\todonaps{Talk about this thing}
+A more useful and complete tool created by NVidia for the profiling of CUDA applications is the Compute Visual Profiler.
+
+This tool is very similar to the Command Line Profiler. It allows the programmer to analyze the application without the need to recompile the code, it is also able to work with CUPTI counters in the same way, and the raw information retrieved is virtually the same.
+
+Yet, the presence of a Graphical User Interface (GUI) addresses the flaws regarding how the command line tool outputs the results. Functions are exhibited in a timeline, which facilitates the user interpretation of relative elapsed times, and two tabs show the properties and graphs related to each function in the timeline.
+
+Also, one of the best features in this tool is the analysis it automatically performs using the retrieved the data. Programmers less used to the massively parallel model using a GPU can easily obtain a somewhat detailed analysis indicating the key problems of the code.
+
+If not as a complete profile tool, since the Visual Profiler suffers from the limitations already mentioned for the Command Line Profiler, this allows a programmer to identify the major bottlenecks and issues in the developped, despite the acquaintance with the parallelism model and GPU hardware characteristics. It can easily be used as an effortless starting point for a deep profile using CUPTI.

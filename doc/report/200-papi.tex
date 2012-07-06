@@ -3,14 +3,14 @@
 
 %\todo[inline]{short papi description (no cuda yet)}
 
-Performance API \cite{papi} (commonly refered to as PAPI) is a library developed by the Innovative Computing  Laboratory from the University of Tennessee that allows programs to access counters and measurement instructions that operate on the hardware level.
+Performance API \cite{papi} (commonly refered to as PAPI) is a library developed by the Innovative Computing  Laboratory from the University of Tennessee that allows programs to access counters and measurement instructions that operate at the hardware level.
 
 Most modern processors provide a set of built-in counters that can be programatically used to keep track of information that may be helpful to profile the program. PAPI allows the programmer to use these counters, using the library's functions, and measure a set of events within a block of code.
 
-The events that can be measured by the library are varied. The most common counters measure events like clock cycles, number of total instructions (from which some can measured separately, like additions, multiplications, divisions, integer or floating-point operations), number of hits and misses of each cache level, branch instructions, or stall cycles.
+The events that can be measured by the library are varied. The most common counters measure events like clock cycles, number of total instructions (from which some can measured separately, like additions, multiplications, divisions, integer or floating-point operations), number of hits and misses in each cache level, branch instructions, or stall cycles.
 
-The actual set of counters that can be measured is architecture-specific. Because of this, PAPI provides tools that show what counters can be measured on a specific machine, and provides a more intuitive alias for each one, instead of the hexadecimal code provided by the manufacturer.
+The actual set of counters that can be measured is architecture-specific. Because of this, PAPI provides tools to show what counters can be measured on a specific machine, and provides a more intuitive alias for each counter, instead of the hexadecimal code provided by the manufacturer.
 
-PAPI also attempts to deal with some of the limitations of hardware counters, like it's limited amount. For instance, an Intel Xeon cenas coisas has only X real hardware counters. \todo[inline]{Substituir cenas coisas por um processador a sério, e X pelo nº de contadores}.
+PAPI also attempts to deal with some of the limitations of hardware counters, like its limited amount. For instance, an \intel \xeon X5650 at 2.67 GHz has only 7 real hardware counters.
 
-For this, PAPI provides multiplexing, where a set of counters issued by the programmer share a time slice of the hardware counter, and the final result is estimated based on the total results, and the percentage of time that each counter consumed. Of course, this doesn't allow counter results to be nearly as accurate as they would be if measured on separate runs, but given the measured code block is large enough to minimize multiplexing errors, should provide a good enough alternative for programs where the execution time difficults multiple executions to be made.
+For this, PAPI provides multiplexing, where a set of counters issued by the programmer share a time slice of the hardware counter, and the final result is estimated based on the total results, and the percentage of time that each counter consumed. Of course, this doesn't allow counter results to be nearly as accurate as they would be if measured on separate runs, but given the measured code block is large enough to minimize multiplexing errors, it should provide a good enough alternative for programs where the execution time hampers multiple executions to be made.
