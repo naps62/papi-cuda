@@ -6,7 +6,7 @@ MODE ?= RLS
 
 ifeq ($(HOSTNAME),compute-611-2.local)
 CXXFLAGS = -I ./include,/share/apps/boost/include,$(HOME)/include,/usr/local/cuda/extras/CUPTI/include,/usr/local/papi4cuda/include
-LDFLAGS = -L /share/apps/boost/lib,$(HOME)/lib,$(HOME)/lib,/usr/local/cuda/extras/CUPTI/lib64,/usr/local/papi4cuda/lib -lcupti -lglut -lboost_system -lpapi
+LDFLAGS = -L /share/apps/boost/lib,$(HOME)/lib,$(HOME)/lib,/usr/local/cuda/extras/CUPTI/lib64,/usr/local/papi4cuda/lib -lcupti -lboost_system -lpapi
 else
 ifeq ($(UNAME),Darwin)
 CXXFLAGS = -I ./include

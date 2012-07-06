@@ -1,14 +1,10 @@
 #include <cuda.h>
 #include <cupti.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-#define N 10
-//#define THREADS 11
-
-#define EVENT_NAME_00 "prof_trigger_00"
-#define EVENT_NAME_01 "prof_trigger_01"
-#define EVENT_NAME_02 "prof_trigger_02"
-#define EVENT_NAME_03 "prof_trigger_03"
+#include "../common/kernels.cu"
 
 #define CHECK_CU_ERROR(err, cufunc)										\
 	if (err != CUDA_SUCCESS) { 											\
@@ -78,20 +74,6 @@ static void displayEventVal(RuntimeApiTrace_t *trace, char *eventName) {
 	printf("Event Value: %llu\n", (unsigned long long) trace->eventVal);
 }
 
-__global__ void kernel(int *arr) {
-	// should return 11
-	__prof_trigger(00);
-
-	int id = threadIdx.x + blockDim.x * blockIdx.x;
-	if (id >= N) return;
-
-	// should yield 10
-	__prof_trigger(01);
-
-	if (arr[id] < 4) __prof_trigger(02); //should yield 4
-	else             __prof_trigger(03); //should yield 6
-}
-
 int main(int argc, char **argv) {
 	int deviceCount;
 	CUcontext context = 0;
@@ -115,8 +97,8 @@ int main(int argc, char **argv) {
 		return -2;
 	}
 
-	if (argc < 3) {
-		printf("Usage: ./a.out <num_threads> <event_name>\n");
+	if (argc < 5) {
+		printf("Usage: ./a.out <1|2(kernel_version)> <num_threads> <event_name>\n");
 		return -2;
 	}
 
@@ -138,7 +120,10 @@ int main(int argc, char **argv) {
 	cuptiErr = cuptiEventGroupCreate(context, &cuptiEvent.eventGroup, 0);
 	CHECK_CUPTI_ERROR(cuptiErr, "cuptiEventGroupCreate");
 
-	int threads = atoi(argv[1]);
+	int version = atoi(argv[1]);
+	int threads = atoi(argv[2]);
+	int blocks = atoi(argv[3]);
+	int N = threads;
 	/*switch(atoi(argv[1])) {
 		case 0: eventName = EVENT_NAME_00; break;
 		case 1: eventName = EVENT_NAME_01; break;
@@ -148,7 +133,7 @@ int main(int argc, char **argv) {
 			printf("Invalid trigger num: %d\n", atoi(argv[1]));
 			return -2;
 	}*/
-	eventName = argv[2];
+	eventName = argv[4];
 
 	cuptiErr = cuptiEventGetIdFromName(dev, eventName, &cuptiEvent.eventId);
 	if (cuptiErr != CUPTI_SUCCESS) {
@@ -168,13 +153,21 @@ int main(int argc, char **argv) {
 	CHECK_CUPTI_ERROR(cuptiErr, "cuptiEnableCallback");
 
 
-	int host_arr[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	int *host_arr = (int *) malloc(sizeof(int) * N);
 	int *dev_arr;
+
+	srand(time(NULL));
+	for(int i = 0; i < N; ++i)
+		host_arr[i] = rand();
 	
 
 	cudaMalloc(&dev_arr, sizeof(int) * N);
 	cudaMemcpy(dev_arr, &host_arr, sizeof(int) * N, cudaMemcpyHostToDevice);
-	kernel<<< threads, 1 >>>(dev_arr);
+
+	if (version == 1)
+		kernel_one<<< threads, blocks >>>(dev_arr, N);
+	else
+		kernel_two<<< threads, blocks >>>(dev_arr, N);
 
 	displayEventVal(&trace, eventName);
 	trace.eventData = NULL;

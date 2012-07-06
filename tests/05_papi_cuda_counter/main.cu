@@ -1,23 +1,11 @@
 #include <cstdio>
-
+#include <stdlib.h>
+#include <time.h>
 #include <papi.h>
 
 #define PAPI_ERROR(n,v) (fprintf(stderr, "%s failed with code %d\n", (n), (v)))
 
-
-
-__global__
-void kernel () {
-	//int blockX = blockIdx.x;
-	//int blockY = blockIdx.y;
-
-	//int threadX = threadIdx.x;
-	//int threadY = threadIdx.y;
-	//int threadZ = threadIdx.z;
-
-	//cuPrintf("[%d,%d]\t[%d,%d,%d]\n", blockX, blockY, threadX, threadY, threadZ);
-}
-
+#include "../common/kernels.cu"
 
 
 __host__
@@ -25,8 +13,10 @@ int main (int argc, char * argv[]) {
 	int retval;
 
 	//	arguments
-	int nthreads = atoi(argv[1]);
-	int nblocks = atoi(argv[2]);
+	int version = atoi(argv[1]);
+	int nthreads = atoi(argv[2]);
+	int nblocks = atoi(argv[3]);
+	int N = nthreads;
 
 
 
@@ -43,11 +33,12 @@ int main (int argc, char * argv[]) {
 
 
 
-	int tmp_eventcnt = argc - 3;
-	char ** tmp_argv = argv + 3;
+	int tmp_eventcnt = argc - 4;
+	char ** tmp_argv = argv + 4;
 	char ** tmp_names = new char*[tmp_eventcnt];
 	int * tmp_events = new int[tmp_eventcnt];
 	for (int i = 0; i < tmp_eventcnt; ++i) {
+		fprintf(stderr, "%s\n", tmp_argv[i]);
 		retval = PAPI_event_name_to_code(tmp_argv[i], tmp_events + eventcnt);
 		if (retval != PAPI_OK)
 			PAPI_ERROR("PAPI_event_name_to_code", retval);
@@ -74,6 +65,18 @@ int main (int argc, char * argv[]) {
 	free(tmp_events);
 
 
+	int *host_arr = (int *) malloc(sizeof(int) * N);
+	int *dev_arr;
+
+	srand(time(NULL));
+	for(int i = 0; i < N; ++i)
+		host_arr[i] = rand();
+	
+
+	cudaMalloc(&dev_arr, sizeof(int) * N);
+	cudaMemcpy(dev_arr, &host_arr, sizeof(int) * N, cudaMemcpyHostToDevice);
+
+
 
 	int set = PAPI_NULL;
 	retval = PAPI_create_eventset(&set);
@@ -90,13 +93,10 @@ int main (int argc, char * argv[]) {
 	if (retval != PAPI_OK)
 		PAPI_ERROR("PAPI_start", retval);
 
-
-	//cudaPrintfInit();
-	kernel<<< nblocks, nthreads >>>();
-	//cudaPrintfDisplay(stdout, true);
-	//cudaPrintfEnd();
-
-
+	if (version == 1)
+		kernel_one<<< nthreads, nblocks >>>(dev_arr, N);
+	else
+		kernel_two<<< nthreads, nblocks >>>(dev_arr, N);
 
 
 	retval = PAPI_stop(set, values);
