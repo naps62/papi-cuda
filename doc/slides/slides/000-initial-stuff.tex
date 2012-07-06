@@ -1,20 +1,26 @@
-\section{Profiling: CPU vs GPU}
+\section{GPU Profiling}
 
 \frame{
 	\frametitle{GPU Profiling}
 
 	\begin{block}{What can be done}
-		Gather GPU specific data
-			\begin{itemize}
-				\item Hardware counters
-				\item Global GPU activity
-			\end{itemize}
+		\begin{itemize}
+			\item Gather GPU specific data
+				\begin{itemize}
+					\item[-] Hardware counters
+					\item[-] Global GPU activity
+				\end{itemize}
 
-		Analyse and prove code improvements
+			\item Analyse and prove code improvements
+		\end{itemize}
 	\end{block}
 
-	\begin{block}{What can't be done}
-		Compare CPU vs GPU implementations (except for global speedups)
+	\begin{block}{What cannot be done}
+		\begin{itemize}
+			\item Compare CPU vs GPU implementations (except for global speedups)
+			\item in-kernel profiling
+		\end{itemize}
+
 	\end{block}
 }
 
@@ -35,8 +41,9 @@
 			\item Multi-context CUDA apps still lack support
 		\end{itemize}
 
-		\begin{figure}
-			\includegraphics[height=.45\paperheight]{../images/fermi.jpeg}
-		\end{figure}
 	\end{block}
+
+	\begin{figure}
+		\includegraphics[height=.45\paperheight]{../images/fermi.jpeg}
+	\end{figure}
 }

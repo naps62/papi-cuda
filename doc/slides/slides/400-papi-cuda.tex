@@ -25,3 +25,37 @@
 		\item \textbf{\larger No documentation at all available!}
 	\end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]
+	\begin{columns}
+		\column{0.45\textwidth}
+			\textbf{Without callbacks:}
+			\begin{verbatim}
+				registerEventSet();
+				loop {
+				   kernel1<<<...>>>()
+				   kernel2<<<...>>>();
+				}
+				getResults();
+			\end{verbatim}
+			\hfill
+
+		\column{0.45\textwidth}
+			\textbf{With callbacks:}
+			\begin{verbatim}
+				callback {
+				   on_kernel_enter:
+				      registerEventSet();
+				   on_kernel_exit:
+				      getResults();
+				}
+
+				loop {
+				   kernel1<<<...>>>()
+				   kernel2<<<...>>>();
+				}
+			\end{verbatim}
+
+	\end{columns}
+
+\end{frame}
