@@ -1,13 +1,16 @@
 \section{Conclusions}
 \label{sec:anal}% i know, right?
 
-In this work, several profiling methodologies for CUDA applications were studied and compared. While the builtin profilers, Command Line Profiler, CUPTI API, and Visual Profiler, provided by NVidia, have similar backgrounds, they can be easily distinguished by what kind of profiling should be done by them. 
-The Command Line Profiler can be useful for small applications, or to analyse a small number of events, or even simply execution time, to look for possible bottlenecks and optimization points
+In this work, several profiling methodologies for CUDA applications were studied and compared. While the built-in profilers, Command Line Profiler, CUPTI API, and Visual Profiler, provided by NVidia, have similar backgrounds, they can be easily distinguished by what kind of profiling should be done by them.
 
-The Visual Profiler gives a more intuitive approach to achieve a similar result, and is probably the way to go for those less acquainted to more advanced tools.
+The Command Line Profiler can be useful for small applications, or to analyze a small number of events, or even simply execution time, to look for possible bottlenecks and optimization points
 
-On the background of both of them is the CUDA driver, whose API is exposed by CUDA and CUPTI libraries. This allows for the same profiling measurements to be hard-coded into the program, and with the appropriate usage of the API, a much better, more specific profiling can be done. The additional work is considerable, and some previous knowledge is required, but in a lot of cases, it proves necessary to get measurements that wouldn't be possible by using a simple and more high-level profiler.
+The Visual Profiler gives a more intuitive approach to achieve a similar result, and is probably the way to go for those less acquainted with more advanced tools.
 
-Finally, PAPI CUDA is an attempt to bring CUDA profiling to an already existing profiling API. Given the popularity of the library, it would be expected that programmers familiar with it would be able to easily use it on their first steps in CUDA development. Although is likely one of the main purposes of the CUDA component, the actual result is a poor attempt at creating a wrapper for CUPTI.
+On the background of both of them is the CUDA driver, whose API is exposed by CUDA and CUPTI libraries. This allows for the same profiling measurements to be hard-coded into the program, and with the appropriate usage of the API, a much better, more specific profiling can be done. The additional work is considerable, and some previous knowledge is required, but in a lot of cases, it proves necessary to get measurements that would not be possible by using a simple and more high-level profiler.
 
-Not only does PAPI CUDA fail to provide an actual advantage over using CUPTI, it even goes to the point of making it impossible to achieve the same results. In some testing ocasions, the original CUPTI callbacks actually had to be used as a wrapper to PAPI CUDA event set creation, eliminating the whole point of using PAPI as the profiling API.
+Finally, PAPI CUDA is an attempt to bring CUDA profiling to an already existing profiling API. Given the popularity of the library, it would be expected that programmers familiar with it would be able to easily use it on their first steps in CUDA development. Although it is likely one of the main purposes of the CUDA component, the actual result is a poor attempt at creating a wrapper for CUPTI.
+
+Not only does PAPI CUDA fail to provide an actual advantage over using CUPTI, it even goes to the point of making it impossible to achieve the same results. In some testing occasions, the original CUPTI callbacks actually had to be used as a wrapper to PAPI CUDA event set creation, eliminating the whole point of using PAPI as the profiling API.
+
+The application of the PAPI interface to the given test case also did not bring any advantage, on the contrary. Visual Profiler provided a more complete analysis, without having to insert any change in the code.

@@ -3,11 +3,11 @@
 
 This API provides accesses to counters on a CUDA-enabled device. Much like PAPI, although with some differences due to architectural aspects, this counters provide access to hardware level counters to measure specific events on the GPU.
 
-The workflow of this API is straighforward, by simply defining a group of events to measured prior to the kernel invocation, and retrieving the results at the end.
+The workflow of this API is straightforward, by simply defining a group of events to measured prior to the kernel invocation, and retrieving the results at the end.
 
 Some care needs to be taken with this, as event registration is asynchronous, meaning it is the programmer's responsibility the relevant kernel code only starts to run after the registration, and not thread-safe, meaning that, if other threads in the application are also using the GPU, chances are they are concurrently executing kernels, which will interfere with the measurements.
 
-The set of events that can be measured is dependant on the compute capability of the device used. Prior to compute capability 2.0, the event set was quite limited, allowing only measurements of cache hits, misses, number of instructions (optionally of a given type), divergent branches, and counters related to memory accesses.
+The set of events that can be measured is dependent on the compute capability of the device used. Prior to compute capability 2.0, the event set was quite limited, allowing only measurements of cache hits, misses, number of instructions (optionally of a given type), divergent branches, and counters related to memory accesses.
 
 There are also 8 generic purpose triggers that can be used by the programmer to measure specific programmer-defined events in the code.
 

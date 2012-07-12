@@ -1,4 +1,12 @@
 \section{Introduction}
 
-\todo[inline]{Intro}
-\todo[inline]{Explain here that all numbers refer to the Fermi architecture, unless specified otherwise}
+% \todo[inline]{Intro}
+% \todo[inline]{Explain here that all numbers refer to the Fermi architecture, unless specified otherwise}
+
+The Performance API (PAPI) is a very popular library used by programmers to access the hardware counters available in the micro-processors. This is required in order to achieve a deeper understanding of what is happening at the hardware level, which leads to the identification of bottlenecks and performance problems.
+
+PAPI has been extended to several components besides the CPU. More recently, the CUDA component was added to allow programmers to profile their massively parallel applications using a familiar interface.
+
+This document studies the PAPI interface for the CUDA component and where it stands amongst the already existing profiling tools by \nvidia. To further evaluate its usage, a large test case is analyzed using this library, and the results are compared with the other tools. All the numbers used throughout this document refer to the Fermi GPU architecture, unless stated otherwise.
+
+\cref{sec:papi} describes the whole PAPI library and its usage, while the CUDA component is presented in \cref{sec:papi-cuda}. \cref{sec:cuda} describes the CUDA library, its programming model and the tools available in the software development kit for profiling. All these tools are tested and commented in \cref{sec:test}. The results from using PAPI CUDA and the other tools with the larger test case are presented in \cref{sec:results}.

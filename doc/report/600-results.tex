@@ -1,6 +1,10 @@
 \section{Results}
 \label{sec:results}
 
-\todo[inline]{Results from profiling the test case. Not too extensive, since the interest here is in the analysis of the profiler, and not the actual results}
+% \todo[inline]{Results from profiling the test case. Not too extensive, since the interest here is in the analysis of the profiler, and not the actual results}
+
+To profile the described test case, PAPI CUDA was added to the implementation, using CUPTI events to start/stop the measurements at the proper locations. Yet, problems arised, as the interface returned a very low number of branches with almost no divergence. Further code analysis and tests using the Visual Profiler with the same counter showed that the PAPI CUDA interface only measured the global kernel, disregarding what happened in the device kernels. Due to the excessive amount of code necessary to initialize the PAPI library, it was not possible to find if this was a programmer error, or if it is a library bug.
+
+The Visual Profiler, on the other hand, provided a very complete overview of the program without the need to recompile. Results showed the test case suffers from a high amount of branch divergence in the device kernels, and low memory efficiency.
 
 \input{report/610-common-limitations}

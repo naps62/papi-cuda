@@ -1,5 +1,11 @@
 \subsection{Test Case}
 \label{sec:test:case}
 
-\todo[inline]{Talk here about the testing done on the pathtracer}
-\todo[inline]{Explain what the test case is, the tests performed, and the methodology (no need for appendices i think, unless this becomes too large)}
+%\todo[inline]{Talk here about the testing done on the pathtracer}
+%\todo[inline]{Explain what the test case is, the tests performed, and the methodology (no need for appendices i think, unless this becomes too large)}
+
+The test case used for larger tests was a pathtracer implementation using CUDA. It consisted on four CUDA kernels: one global, called by the host, which performs a loop to iteratively complete the shading process; and three device kernels, called by the global one.
+
+Tests were performed using this case and the three major tools for profiling available in the \nvidia software development kit (\cref{sec:521,sec:522,sec:523}).
+
+No concrete methodology was followed in any test, as the goal of this document was only to achieve functional versions, in order to evaluate the impact of each tool in the development process.

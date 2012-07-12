@@ -1,4 +1,4 @@
-\begin {columns}
+\begin{columns}
 \column{0.45\textwidth}
 \textbf{Without callbacks:}
 \begin{verbatim}

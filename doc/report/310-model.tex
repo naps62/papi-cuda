@@ -1,7 +1,7 @@
 \subsection{Programming Model}
 \label{sec:cuda:model}
 
-A CUDA device (GPU) tipically consists on a group of Streaming Multiprocessors (SM's), each one containing up to 64 CUDA Cores \footnote{This refers to the CUDA architecture up until Fermi. The new Kepler architecture features 192 CUDA Cores in each new extended Streaming Multiprocessor (SMX)}
+A CUDA device (GPU) typically consists on a group of Streaming Multiprocessors (SM's), each one containing up to 64 CUDA Cores \footnote{This refers to the CUDA architecture up until Fermi. The new Kepler architecture features 192 CUDA Cores in each new extended Streaming Multiprocessor (SMX)}.
 These cores are the the elementary processing unit of a GPU. Each one is capable of one simple sequential operation at a time (e.g., arithmetic operations). More complex operations, like trigonometric functions, and square roots are executed on four Special Function Units, which process them at a rate of one instruction per clock-cycle.
 
 Each SM can only issue one instruction each clock cycle, which means that all CUDA Cores of a given SM must execute the same instruction (although the indexing of each CUDA Thread allows them to operate on different data). Thus, threads are grouped into warps, 32 threads each, which are executed at the same time on an SM. Two schedulers per SM allow near peak performance by selecting two instructions from two different warps to be issued every clock cycle, increasing concurrency.

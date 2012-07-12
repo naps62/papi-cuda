@@ -19,19 +19,27 @@ Runtime data manipulation can also be done, since counter values are immediately
 Overall, it is the most versatile of all profilers tested. The main drawback being the more difficult usage, since the code written deals directly with the driver, meaning that some low level knowledge of the architecture and the environment is even more essential.
 
 \subsubsection{Visual Profiler}
-\label{sec:533}
+\label{sec:523}
 
-The potencialities of the Visual Profiler do not exceed those of the Command Line Profiler, much less those of CUPTI, at least regarding the quality and accuracy of the results obtained. While it has some very strong points in the automatic operations performed, the counters available and the data retrieved is limited.
+The potentialities of the Visual Profiler do not exceed those of the Command Line Profiler, much less those of CUPTI, at least regarding the quality and accuracy of the results obtained. While it has some very strong points in the automatic operations performed, the counters available and the data retrieved is limited.
 
 The profiler counters are available in a similar way to that of the command line, yet a window presents all the available counters in the current hardware, saving the programmer the trouble of finding them.
 
 Counter conflicts are dealt by the Visual Profiler by performing several runs of the application, thus obtaining the most complete image of the application with very low effort.
 
-Lastly, while a GUI and the automatisms implemented save a lot of effort to the programmer, the learning curve is less steep. Customization may be easier to achieve with this tool than with the command line alternative, but the time required to learn how to effectively customize the Visual Profiler to obtain all the information required by the programmer may be proihibitive when compared with the other profilling tools.
+Lastly, while a GUI and the automatisms implemented save a lot of effort to the programmer, the learning curve is less steep. Customization may be easier to achieve with this tool than with the command line alternative, but the time required to learn how to effectively customize the Visual Profiler to obtain all the information required by the programmer may be prohibitive when compared with the other profiling tools.
 
 \subsubsection{PAPI CUDA}
 \label{sec:534}
 
-\todopfac{referir entre outras coisas que foi preciso usar o cupti (a callbacks api) para trabalhar com o papi cuda, embora seja suposto ser um wrapper para ele}
+% \todopfac{referir entre outras coisas que foi preciso usar o cupti (a callbacks api) para trabalhar com o papi cuda, embora seja suposto ser um wrapper para ele}
 
-\todonaps{usar primeiro o sample, falar depois}
+% \todonaps{usar primeiro o sample, falar depois}
+
+The PAPI CUDA interface does not stand better than any of the alternatives above. Its place in the software layers stands between the CUPTI low level API and the Command Line Profiler high level functionalities.
+
+This interface allows a user with low or no knowledge of the CUDA programming model to measure a specific kernel called by the host, simply by initializing the library, event set and by starting the measurement. The API is the same as used with any C/C++ application to run only in the host, it only differs in the hardware counter used (specific components have specific counters).
+
+PAPI CUDA is supposed to be a wrapper for the CUPTI API, thus allowing low level operations to be performed in an easier fashion. Yet, the tests performed showed that it lacks the functionalities of CUPTI events. In fact, the best way to use the interface is by using these events to start/stop it precisely at the entrance/exit of the kernel.
+
+On a last remark, one of the worst defects with the PAPI interface in general is the necessity for a great amount of code to be placed to prepare it and cleanup after it. This characteristic remains the same with PAPI CUDA. CUPTI is not so verbose, and is, therefore, more convenient to use, providing the same functionalities.
